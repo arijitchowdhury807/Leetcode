@@ -1,0 +1,62 @@
+class Solution {
+    public int[] maxTargetNodes(int[][] edges1, int[][] edges2) {
+
+         int n = edges1.length + 1;
+        int m = edges2.length + 1;
+        
+        int[] depth1 = getDepthParity(n, edges1);
+        int[] depth2 = getDepthParity(m, edges2);
+        
+        int cnt1Even = 0, cnt1Odd = 0;
+        for (int d : depth1) {
+            if (d % 2 == 0) cnt1Even++;
+            else cnt1Odd++;
+        }
+        
+        int cnt2Even = 0, cnt2Odd = 0;
+        for (int d : depth2) {
+            if (d % 2 == 0) cnt2Even++;
+            else cnt2Odd++;
+        }
+        
+        int[] answer = new int[n];
+        for (int i = 0; i < n; i++) {
+            if (depth1[i] % 2 == 0) {
+                // node i has even depth
+                answer[i] = Math.max(cnt1Even + cnt2Even, cnt1Even + cnt2Odd);
+            } else {
+                // node i has odd depth
+                answer[i] = Math.max(cnt1Odd + cnt2Even, cnt1Odd + cnt2Odd);
+            }
+        }
+        return answer;
+    }
+    
+    private int[] getDepthParity(int size, int[][] edges) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < size; i++) graph.add(new ArrayList<>());
+        
+        for (int[] e : edges) {
+            graph.get(e[0]).add(e[1]);
+            graph.get(e[1]).add(e[0]);
+        }
+        
+        int[] depth = new int[size];
+        Arrays.fill(depth, -1);
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        depth[0] = 0;
+        
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            for (int nei : graph.get(node)) {
+                if (depth[nei] == -1) {
+                    depth[nei] = depth[node] + 1;
+                    queue.offer(nei);
+                }
+            }
+        }
+        return depth;
+        
+    }
+}
