@@ -1,0 +1,51 @@
+class Solution {
+    private void dfs(int edges[],int node,int dist[],boolean visited[]){
+
+        visited[node] = true;
+
+        int v = edges[node];
+
+        if(v!= -1 && !visited[v]){
+            visited[v] = true;
+            dist[v] = 1+dist[node];
+            dfs(edges,v,dist,visited);
+        }
+    }
+    public int closestMeetingNode(int[] edges, int node1, int node2) {
+
+        int n = edges.length;
+
+        int dist1[] = new int[n];
+        int dist2[] = new int[n];
+
+        boolean visited1[] = new boolean[n];
+        boolean visited2[] = new boolean[n];
+
+         Arrays.fill(dist1, Integer.MAX_VALUE);
+        Arrays.fill(dist2, Integer.MAX_VALUE);
+
+        dist1[node1] = 0;
+        dist2[node2] = 0;
+        dfs(edges,node1,dist1,visited1);
+        dfs(edges,node2,dist2,visited2);
+
+        int minDist = Integer.MAX_VALUE;
+        int result = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (visited1[i] && visited2[i]) {
+                int maxDist = Math.max(dist1[i], dist2[i]);
+                if (maxDist < minDist) {
+                    minDist = maxDist;
+                    result = i;
+                }
+            }
+        }
+
+        return result;
+
+
+
+        
+    }
+}
