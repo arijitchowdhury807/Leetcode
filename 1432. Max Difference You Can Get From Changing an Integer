@@ -1,0 +1,45 @@
+class Solution {
+    public int maxDiff(int num) {
+        String s = Integer.toString(num);
+        char maxchars[] = s.toCharArray();
+        char minchars[] = s.toCharArray();
+
+        for(int i=0;i<s.length();i++){
+            if(maxchars[i] != '9'){
+                char target = maxchars[i];
+                for(int j=0;j<s.length();j++){
+                    if(maxchars[j] == target){
+                        maxchars[j] = '9';
+                    }
+                }
+                break;
+            }
+            
+        }
+        if(minchars[0] > '1'){
+            char target = minchars[0];
+            for(int i=0;i<s.length();i++){
+                if(target == minchars[i]){
+                    minchars[i] = '1';
+                }
+            }
+        }else{
+            for(int i=1;i<s.length();i++){
+                if(minchars[i] > '1'){
+                    char target = minchars[i];
+                    for(int j =i;j<s.length();j++){
+                        if(target == minchars[j]){
+                            minchars[j] = '0';
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        int max = Integer.parseInt(new String(maxchars));
+        int min = Integer.parseInt(new String(minchars));
+
+        return max - min;
+        
+    }
+}
