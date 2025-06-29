@@ -1,0 +1,43 @@
+class Solution {
+    public int splitArray(int[]  nums, int k) {
+        // code here
+        int low = 0, high = 0;
+        for (int num : nums) {
+            low = Math.max(low, num);  // max element
+            high += num;               // total sum
+        }
+
+        int result = high;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (canSplit(nums, k, mid)) {
+                result = mid;         // try to minimize max sum
+                high = mid - 1;
+            } else {
+                low = mid + 1;        // need a bigger max sum
+            }
+        }
+
+        return result;
+    }
+
+    // Helper function to check if we can split with given max sum
+    private boolean canSplit(int[] nums, int k, int maxSumAllowed) {
+        int count = 1;     // number of subarrays
+        int currSum = 0;
+
+        for (int num : nums) {
+            if (currSum + num > maxSumAllowed) {
+                count++;
+                currSum = num;
+                if (count > k) return false;
+            } else {
+                currSum += num;
+            }
+        }
+
+        return true;
+    }
+};
